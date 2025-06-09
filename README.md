@@ -1,0 +1,1 @@
+This example shows how to navigate to a PopUp page that uses a DataTemplate to display items in a ViewModel, make a list of selections, then return the indexes of those selections back to the main page. It has good examples of Binding, Binding Context and how to get data back from after a navigation.
