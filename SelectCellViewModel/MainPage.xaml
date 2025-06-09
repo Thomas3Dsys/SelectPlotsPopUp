@@ -1,43 +1,8 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             
-             xmlns:local="clr-namespace:CellSelectDemo"
-             x:Class="CellSelectDemo.MainPage"
-             x:DataType="local:CellSelectorViewModel">
-    <ContentPage.BindingContext>
-        <local:CellSelectorViewModel />
-    </ContentPage.BindingContext>
-    <ContentPage.Resources>
-        <DataTemplate x:Key="PlotCellTemplate" x:DataType="local:PlotCell">
-        <Grid Margin="5" HeightRequest="120" WidthRequest="105">
-                <Button
- BackgroundColor="{Binding Color}" 
-                        Text="{Binding Name}"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"   
-                   Command="{Binding 
-                          Source={RelativeSource AncestorType={x:Type local:CellSelectorViewModel}},
-                          Path=SelectCell}"
-                    CommandParameter="{Binding Index}"
-                        />
-                <!-- https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/data-binding/relative-bindings?view=net-maui-9.0 -->
-            </Grid>
-            </DataTemplate>
-    </ContentPage.Resources>
-    <StackLayout Margin="10,35,10,10">
-        <Label Text="RefreshView Demo"
-               FontAttributes="Bold"
-               HorizontalOptions="Center" />
-            <ScrollView>
-                <FlexLayout Direction="Row"
-                            Wrap="Wrap"
-                            AlignItems="Center"
-                            AlignContent="Center"
-                            BindableLayout.ItemsSource="{Binding PlotCells}"
-                            BindableLayout.ItemTemplate="{StaticResource PlotCellTemplate}" />
-            </ScrollView>
-       
-        <Button Text="Get Selections (Mainpage)" Clicked="GetSelections" />
-
-    </StackLayout>
+             x:Class="CellSelectDemo.MainPage">
+    <VerticalStackLayout>
+        <Button Text="Open Select Pop Up" Clicked="OpenSelectionPopUp"/>
+        <Label x:Name="DisplaySelections" Text="Selections:"/>
+    </VerticalStackLayout>
 </ContentPage>

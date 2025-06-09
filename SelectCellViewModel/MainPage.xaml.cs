@@ -1,23 +1,51 @@
-﻿namespace CellSelectDemo
+﻿using System.Collections.Generic;
+using System.Windows.Input;
+
+namespace CellSelectDemo
 {
+/// <summary>
+/// This is the main page.
+///   It will open the SelectionPopUp then when that is closed and this page appears again, it 
+///   will get the selected values from the ViewModel's binding context.
+/// </summary>
     public partial class MainPage : ContentPage
     {
-      
+
+        List<int> SelectedCells = new List<int> { };
+        SelectionPopUp makeSelection = new SelectionPopUp();
+        bool IsWaitingForSelection = false;
 
         public MainPage()
         {
             InitializeComponent();
         }
-
-        private void GetSelections(object sender, EventArgs e)
+        public ICommand CloseGetSelections => new Command(async () => await DoCloseGetSelections());
+        private async void OpenSelectionPopUp(object sender, EventArgs e)
         {
-            var button = (Button)sender;
-            CellSelectorViewModel viewModel = (CellSelectorViewModel)button.BindingContext;
-            PlotCell[] plotCells = viewModel.PlotCells;
-            List<int> selected = plotCells.Where(x => x.IsSelected).Select(x => x.Index).ToList();
+            IsWaitingForSelection = true;
+            makeSelection = new SelectionPopUp();
+            await Navigation.PushModalAsync(makeSelection);
         }
-        //ToDo: Make a SelectionPage that does the above and then closes that page and returns the values to Main page
-        //https://learn.microsoft.com/en-us/answers/questions/1418192/closing-popup-from-view-model-and-return-value
-        //
+
+
+        async Task DoCloseGetSelections()
+        {
+            await Navigation.PopModalAsync();
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (IsWaitingForSelection)
+            {
+                CellSelectorViewModel viewModel = (CellSelectorViewModel)makeSelection.BindingContext;
+                SelectedCells = viewModel.SelectedCells;
+                IsWaitingForSelection = false;
+                //   DisplaySelections.Text = string.Join(", ", SelectedCells.Select(x => $"({x[0].ToString()},{x[1].ToString()})").ToArray());
+                DisplaySelections.Text = string.Join(", ", SelectedCells.Select(x => $"({x.ToString()})").ToArray());
+            }
+            
+        }
+        
     }
 }
